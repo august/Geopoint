@@ -1,7 +1,7 @@
 <?php
 /**
- * A small class that helps manage lat/lon pairs
- * that includes distance and compass heading methods
+ * A small class that helps manage latitude, longitude, and altitude points
+ * and calculates distance and compass heading between points
  *
  * @author August Trometer (http://getyowza.com/contact)
  */
@@ -10,6 +10,7 @@ class Geopoint {
 
     public $latitude;
     public $longitude;
+    public $altitude;
 
     private $_sphericalRadius;
 
@@ -20,10 +21,11 @@ class Geopoint {
 
     // latitude, longitude is the ISO standard
     // http://en.wikipedia.org/wiki/ISO_6709
-    function __construct($latitude, $longitude) {
+    function __construct($latitude, $longitude, $altitude = 0) {
 
         $this->latitude = floatval($latitude);
         $this->longitude = floatval($longitude);
+        $this->altitude = floatval($altitude);
 
     } // __construct()
 
@@ -42,6 +44,9 @@ class Geopoint {
         $lon_1 = $this->longitude;
         $lat_2 = $geopoint->latitude;
         $lon_2 = $geopoint->longitude;
+        $alt_1 = $this->altitude;
+        $alt_2 = $geopoint->altitude;
+
 
         // the default is meters
         if (!in_array($unit, array('m','mi')))
@@ -53,6 +58,13 @@ class Geopoint {
         $fraction = 2 * asin(sqrt(pow(sin(deg2rad($lat_delta / 2)), 2) + cos(deg2rad($lat_1)) * cos(deg2rad($lat_2)) * pow(sin(deg2rad($lon_delta / 2)), 2)));
 
         $distance = $this->sphericalRadius() * $fraction;
+
+        // take into account the altitude
+        $altitude_delta = abs($alt_1 - $alt_2);
+
+        // while not wholly accurate (it does not take into consideration possible line-of-sight)
+        // distances, in most situations, this is more than accurate enough
+        $distance = sqrt(pow($distance, 2) + pow($altitude_delta, 2));
 
         // convert to miles, if necessary
         if ($unit == 'mi')
@@ -101,7 +113,8 @@ class Geopoint {
 
         // the default is to use the earth's radius
         return self::EARTH_RADIUS;
-    }
+
+    } // sphericalRadius()
 
 
     /**
@@ -112,6 +125,7 @@ class Geopoint {
     public function setSphericalRadius($radius) {
 
         $this->_sphericalRadius = $radius;
-    }
+
+    } // setSphericalRadius()
 
 } // class Geopoint

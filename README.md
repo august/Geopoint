@@ -1,6 +1,7 @@
 # Geopoint
 
-This is a small class that allows the management of latitude/longtude pairs as well as providing methods to determine the distance and compass heading to other points.
+A small class that helps manage latitude, longitude, and altitude points
+and calculates distance and compass heading between those points.
 
 ## Usage
 
