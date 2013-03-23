@@ -43,5 +43,5 @@ The Geopoint class uses the Earth's radius as the default, but allows you to cus
 The Geopoint class allows you to calculate the compass heading to another point.
 The value returned is the heading in degrees, with 0˚ being North, 90˚ East, 180˚ South, and 270˚ West.
 	
-	$distance = $here->compassHeadingToPoint($there); 
+	$heading = $here->compassHeadingToPoint($there); 
 	// returns 108.43494882292 (East Souteast)
