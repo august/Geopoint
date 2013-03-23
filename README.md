@@ -23,9 +23,19 @@ The Geopoint class allows you to calculate the distance to another point. The de
 
 	// to return miles instead of meters
 	$distance = $here->distanceToPoint($there, 'mi');
-	// returns 33.37 
+	// returns 33.372075144605
 
-To calculate distance, the Geopoint class uses the haversine formula, which takes into account the curvature of the Earth.
+To calculate distance, the Geopoint class uses the haversine formula, which takes into account the curvature of the planet.
+
+## Customizing the Radius ##
+
+The Geopoint class uses the Earth's radius as the default, but allows you to customize the radius of the planet if necessary.
+
+	// say we're on Mars
+	$here->setSphericalRadius(3389500);
+
+	$distance = $here->distanceToPoint($there);
+	// returns 28573.241883931 (17.75 miles)
 
 ## Calculating Compass Heading to Another Point ##
 

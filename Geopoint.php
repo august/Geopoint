@@ -9,16 +9,20 @@ class Geopoint {
     public $latitude;
     public $longitude;
 
-    // we use the mean radius of the earth in meters
+    private $_sphericalRadius;
+
+    // the mean radius of the earth in meters
     // http://en.wikipedia.org/wiki/Earth_radius#Mean_radius
     const EARTH_RADIUS = 6371009; // meters
+    
 
     function __construct($latitude, $longitude) {
 
-        $this->latitude = $latitude;
-        $this->longitude = $longitude;
+        $this->latitude = floatval($latitude);
+        $this->longitude = floatval($longitude);
 
     } // __construct()
+
 
     /**
      * The distance between two points, calculated using the
@@ -26,7 +30,7 @@ class Geopoint {
      * http://en.wikipedia.org/wiki/Haversine_formula
      * @param  Geopoint $geopoint The point to calculate the distance to
      * @param  string $unit The unit of measurement (m = meters, mi = miles)
-     * @return float              Distance in meters
+     * @return float Distance in meters
      */
     public function distanceToPoint(Geopoint $geopoint, $unit = 'm') {
 
@@ -44,10 +48,10 @@ class Geopoint {
 
         $fraction = 2 * asin(sqrt(pow(sin(deg2rad($lat_delta / 2)), 2) + cos(deg2rad($lat_1)) * cos(deg2rad($lat_2)) * pow(sin(deg2rad($lon_delta / 2)), 2)));
 
-        $distance = self::EARTH_RADIUS * $fraction;
+        $distance = $this->sphericalRadius() * $fraction;
 
         // convert to miles, if necessary
-        if ($unit = 'mi')
+        if ($unit == 'mi')
             $distance = $distance / 1609.344;
 
         return $distance;
@@ -59,7 +63,7 @@ class Geopoint {
      * Returns the compass heading to the new point in degrees
      * 0 = North, 90 = East, 180 = South, 270 = West
      * @param  Geopoint $point The point to calculate the heading to
-     * @return float         The heading angle in degrees
+     * @return float The heading angle in degrees
      */
     public function compassHeadingToPoint(Geopoint $point) {
 
@@ -79,5 +83,31 @@ class Geopoint {
         return $angle;
 
     } // compassHeadingToPoint()
+
+
+    /**
+     * Returns the spherical radius to use for calculations
+     * The default is to return the Earth's radius
+     * @return float The radius of the sphere
+     */
+    public function sphericalRadius() {
+
+        if (isset($this->_sphericalRadius))
+            return $this->_sphericalRadius;
+
+        // the default is to use the earth's radius
+        return self::EARTH_RADIUS;
+    }
+
+
+    /**
+     * Sets the spherical radius of the globe to use in calculations
+     * @param  float $radius The radius of the globe
+     * @return void
+     */
+    public function setSphericalRadius($radius) {
+
+        $this->_sphericalRadius = $radius;
+    }
 
 } // class Geopoint
