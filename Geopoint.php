@@ -18,6 +18,8 @@ class Geopoint {
     const EARTH_RADIUS = 6371009; // meters
     
 
+    // latitude, longitude is the ISO standard
+    // http://en.wikipedia.org/wiki/ISO_6709
     function __construct($latitude, $longitude) {
 
         $this->latitude = floatval($latitude);
