@@ -25,14 +25,19 @@ class Geopoint {
      * haversine formula which accounts for the spherical shape of the earth
      * http://en.wikipedia.org/wiki/Haversine_formula
      * @param  Geopoint $geopoint The point to calculate the distance to
+     * @param  string $unit The unit of measurement (m = meters, mi = miles)
      * @return float              Distance in meters
      */
-    public function distanceToPoint(Geopoint $geopoint) {
+    public function distanceToPoint(Geopoint $geopoint, $unit = 'm') {
 
         $lat_1 = $this->latitude;
         $lon_1 = $this->longitude;
         $lat_2 = $geopoint->latitude;
         $lon_2 = $geopoint->longitude;
+
+        // the default is meters
+        if (!in_array($unit, array('m','mi')))
+            $unit = 'm';
 
         $lat_delta = $lat_1 - $lat_2;
         $lon_delta = $lon_1 - $lon_2;
@@ -40,6 +45,10 @@ class Geopoint {
         $fraction = 2 * asin(sqrt(pow(sin(deg2rad($lat_delta / 2)), 2) + cos(deg2rad($lat_1)) * cos(deg2rad($lat_2)) * pow(sin(deg2rad($lon_delta / 2)), 2)));
 
         $distance = self::EARTH_RADIUS * $fraction;
+
+        // convert to miles, if necessary
+        if ($unit = 'mi')
+            $distance = $distance / 1609.344;
 
         return $distance;
 

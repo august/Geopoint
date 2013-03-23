@@ -15,11 +15,15 @@ You may also set the latitude and longitude manually:
 
 ## Calculating Distance to Another Point ##
 
-The Geopoint class allows you to calculate the distance, in meters, to another point.
+The Geopoint class allows you to calculate the distance to another point. The default response returns meters.
 
 	$there = new Geopoint(33.81,-117.92);
 	$distance = $here->distanceToPoint($there); 
 	// returns 53707.148901519 (or 33.37 miles)
+
+	// to return miles instead of meters
+	$distance = $here->distanceToPoint($there, 'mi');
+	// returns 33.37 
 
 To calculate distance, the Geopoint class uses the haversine formula, which takes into account the curvature of the Earth.
 
@@ -30,4 +34,3 @@ The value returned is the heading in degrees, with 0˚ being North, 90˚ East, 1
 	
 	$distance = $here->compassHeadingToPoint($there); 
 	// returns 108.43494882292 (East Souteast)
-
