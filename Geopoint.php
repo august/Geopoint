@@ -1,9 +1,11 @@
 <?php
-
 /**
  * A small class that helps manage lat/lon pairs
  * that includes distance and compass heading methods
+ *
+ * @author August Trometer (http://getyowza.com/contact)
  */
+
 class Geopoint {
 
     public $latitude;
